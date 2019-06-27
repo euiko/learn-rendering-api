@@ -39,7 +39,12 @@ matches = os.matchdirs(path.join(LOPENGL_SRC_DIR, "*"))
 -- printtable("halo", matches)
 for _,dir in ipairs(matches) do
     name = path.getrelative(LOPENGL_SRC_DIR, dir)
-    exampleProject(LOPENGL_SRC_DIR, "learn-opengl", name);
+    exampleProject(LOPENGL_SRC_DIR, "learn-opengl", name)
+    copyResource(os.matchdirs(dir .. "/*"), target, name)
+    -- files {
+    --     path.join(LOPENGL_SRC_DIR, name, "**.glsl")
+    -- }
+
     links {
         "learn-opengl",
         "X11",
@@ -50,6 +55,21 @@ for _,dir in ipairs(matches) do
         -- "pstl",
     }
 
+    -- print(path.join(dir, "shaders"))
+    -- if os.isdir(path.join(dir, "shaders")) then
+    --     postbuildcommands ("cp -R " .. path.join(dir, "shaders") .. " " .. path.join(LOPENGL_SRC_DIR, "shaders", name))
+    -- end
+    -- print(path.join(LOPENGL_SRC_DIR, "shaders", name))
+    -- prebuildcommands("echo \"Copying resource to $(TARGETDIR);\"")
+    -- local currentProject = project( "learn-opuengl-" .. name)
+    -- for key, value in pairs(currentProject.solution.blocks) do
+    --     for k, v in pairs(value) do
+    --         -- print(k, v)
+    --     end
+    -- end
+    -- print()
+    -- printtable("a", _OPTIONS)
+    -- printtable(name, shaders)
     buildoptions {
         "-std=c++17",
         "-fopenmp-simd",

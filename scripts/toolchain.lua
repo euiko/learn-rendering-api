@@ -42,6 +42,13 @@ local function crtNone()
 	configuration {}
 end
 
+function copyResource(sources, target, relativePath)
+    for _, source in ipairs(sources) do
+        prebuildcommands(" [ -d $(TARGETDIR)/".. relativePath .." ] || ln -s " .. source .. " $(realpath $(TARGETDIR))/".. relativePath ..";")
+        defines {"RESOURCE_PATH=\"" .. relativePath .. "\""}
+    end
+end
+
 function toolchain(_buildDir, _libDir)
 
 	newoption {
