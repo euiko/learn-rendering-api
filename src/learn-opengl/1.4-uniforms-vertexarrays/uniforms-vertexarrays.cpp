@@ -97,8 +97,8 @@ static unsigned int createShader(const std::string& vertexShader, const std::str
     glLinkProgram(program);
     glValidateProgram(program);
 
-    glDeleteShader(vs);
-    glDeleteShader(fs);
+    if(vs) glDeleteShader(vs);
+    if(fs) glDeleteShader(fs);
 
     return program;
 }
@@ -110,6 +110,11 @@ int main()
     /* Initialize the library */
     if (!glfwInit())
         return -1;
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
     std::cout << RESOURCE_PATH << std::endl;
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
@@ -142,6 +147,10 @@ int main()
         0, 1, 2,
         2, 0, 3
     };
+    unsigned int vertexArray;
+    glGenVertexArrays(1, &vertexArray);
+    glBindVertexArray(vertexArray);
+
     unsigned int buffer;
     glGenBuffers(1, &buffer);
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
@@ -161,18 +170,28 @@ int main()
     std::cout << "FRAGMENT\n";
     std::cout << shaderSources.fragmentSource;
     unsigned int shader = createShader(shaderSources.vertexSource, shaderSources.fragmentSource);
-    glUseProgram(shader);
+    GLCall(glUseProgram(shader));
+    GLCall(int u_Color = glGetUniformLocation(shader, "u_Color"));
 
-    int u_Color = glGetUniformLocation(shader, "u_Color");
     float red = 0.0f;
     float inc = 0.5;
+    GLCall(glUseProgram(0));
+    GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    GLCall(glBindVertexArray(0));
+    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
+    
+        GLCall(glUseProgram(shader));
+        GLCall(glUniform4f(u_Color, red, 0.5f, 0.8f, 1.0f));
 
-        glUniform4f(u_Color, red, 0.5f, 0.8f, 1.0f);
+        GLCall(glBindBuffer(GL_ARRAY_BUFFER, buffer));
+        GLCall(glBindVertexArray(vertexArray));
+        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer));
+
         GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
         if(red > 1.0f) inc = -0.05f;
         if(red < 0.0f) inc = 0.05f;
