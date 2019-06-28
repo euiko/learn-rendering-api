@@ -44,7 +44,9 @@ end
 
 function copyResource(sources, target, relativePath)
     for _, source in ipairs(sources) do
-        prebuildcommands(" [ -d $(TARGETDIR)/".. relativePath .." ] || ln -s " .. source .. " $(realpath $(TARGETDIR))/".. relativePath ..";")
+        local resourceDirName = path.getbasename(source);
+        prebuildcommands(" [ -d $(TARGETDIR)/".. relativePath .." ] || mkdir $(TARGETDIR)/".. relativePath ..";")
+        prebuildcommands(" [ -d $(TARGETDIR)/".. relativePath .."/".. resourceDirName .." ] || ln -s " .. source .. " $(realpath $(TARGETDIR))//".. relativePath .."/;")
         defines {"RESOURCE_PATH=\"" .. relativePath .. "\""}
     end
 end
