@@ -9,6 +9,8 @@
 #include "renderer.h"
 #include "vertex_buffer.h"
 #include "index_buffer.h"
+#include "vertex_array.h"
+#include "vertex_buffer_layout.h"
 
 struct ShaderSources
 {
@@ -127,14 +129,13 @@ int main()
         0, 1, 2,
         2, 0, 3
     };
-    unsigned int vertexArray;
-    glGenVertexArrays(1, &vertexArray);
-    glBindVertexArray(vertexArray);
+
+    VertexArray va;
 
     VertexBuffer vb(positions, 4 * 2 * sizeof(float));
-    
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
+    VertexBufferLayout layout;
+    layout.push<float>(2);
+    va.addBuffer(vb, layout);
     
     IndexBuffer ib(indices, 6);
 
@@ -162,8 +163,8 @@ int main()
         GLCall(glUseProgram(shader));
         GLCall(glUniform4f(u_Color, red, 0.5f, 0.8f, 1.0f));
 
-        vb.bind();
-        GLCall(glBindVertexArray(vertexArray));
+        // vb.bind();
+        va.bind();
         ib.bind();
 
         GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
