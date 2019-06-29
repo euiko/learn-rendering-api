@@ -73,19 +73,19 @@ int main()
 
     float red = 0.0f;
     float inc = 0.5;
-    GLCall(glUseProgram(0));
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GLCall(glBindVertexArray(0));
-    GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+    shader.unbind();
+    vb.unbind();
+    va.unbind();
+    ib.unbind();
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
     
+        shader.bind();
         shader.setUniform4f("u_Color", red, 0.4f, 0.8f, 1.0f);
-
-        // vb.bind();
+        vb.bind();
         va.bind();
         ib.bind();
 
