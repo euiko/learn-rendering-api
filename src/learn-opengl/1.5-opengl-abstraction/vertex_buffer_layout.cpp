@@ -1,7 +1,7 @@
 #include "vertex_buffer_layout.h"
 #include <cassert>
 
-VertexBufferLayout::VertexBufferLayout()
+VertexBufferLayout::VertexBufferLayout() : m_stride(0)
 {
 }
 

@@ -1,5 +1,6 @@
 #include "vertex_array.h"
 #include "renderer.h"
+#include <iostream>
 
 VertexArray::VertexArray()
 {
@@ -31,6 +32,7 @@ void VertexArray::addBuffer(const VertexBuffer& buffer, const VertexBufferLayout
     {
         const auto& element = elements[i];   
         GLCall(glEnableVertexAttribArray(i));
+        std::cout << i << " " << element.count << " " << element.type << " " << element.normalized << " " << layout.getStride() << " " << (const void*)offset << std::endl;
         GLCall(glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.getStride(), (const void*)offset));
         offset += element.count * VertexBufferElement::getSizeOfType(element.type);
     }
