@@ -49,6 +49,9 @@ int main()
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     float positions[] = {
         -0.5f, -0.5f, 0.0f, 0.0f, // 0
         0.5f, -0.5f, 1.0f, 0.0f, // 1
@@ -84,6 +87,7 @@ int main()
     vb.unbind();
     va.unbind();
     ib.unbind();
+    glClearColor(0.2, 0.8, 0.4, 1.0);
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
