@@ -22,6 +22,25 @@
                     "ignoreFailures": true
                 }
             ]
+        },
+        {
+            "name": "(gdb) Debug LearnOpenGL 1.7 - Texture 2D",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/linux64_clang/bin/learn-opengl-1.7-texture2dDebug",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build/linux64_clang/bin/",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
         }
     ]
 }

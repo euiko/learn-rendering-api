@@ -14,6 +14,7 @@
 #include "vertex_array.h"
 #include "vertex_buffer_layout.h"
 #include "shader.h"
+#include "texture.h"
 
 int main()
 {
@@ -36,9 +37,6 @@ int main()
         return -1;
     }
 
-    int w, h, bpp;
-    unsigned char* image = stbi_load(RESOURCE_PATH "textures/logo.png", &w, &h, &bpp, 4);
-
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
@@ -52,29 +50,33 @@ int main()
     std::cout << glGetString(GL_VERSION) << std::endl;
 
     float positions[] = {
-        -0.5f, -0.5f, // 0
-        0.5f, -0.5f, // 1
-        0.5f, 0.5f, // 2
-        -0.5f, 0.5f // 3
+        -0.5f, -0.5f, 0.0f, 0.0f, // 0
+        0.5f, -0.5f, 1.0f, 0.0f, // 1
+        0.5f, 0.5f, 1.0f, 1.0f, // 2
+        -0.5f, 0.5f, 0.0f, 1.0f // 3
     };
 
     unsigned int indices[6] = {
         0, 1, 2,
-        2, 0, 3
+        2, 3, 0
     };
 
     Renderer renderer;
 
     VertexArray va;
 
-    VertexBuffer vb(positions, 4 * 2 * sizeof(float));
+    VertexBuffer vb(positions, 4 * 4 * sizeof(float));
     VertexBufferLayout layout;
+    layout.push<float>(2);
     layout.push<float>(2);
     va.addBuffer(vb, layout);
     
     IndexBuffer ib(indices, 6);
-
-    Shader shader("shaders/basic.glsl");
+    
+    Shader shader("shaders/texture2d.glsl");
+    Texture texture("textures/logo.png");
+    texture.bind();
+    shader.setUniform1i("u_texture", 0);
 
     float red = 0.0f;
     float inc = 0.5;
@@ -89,7 +91,7 @@ int main()
         renderer.clear();
     
         shader.bind();
-        shader.setUniform4f("u_Color", red, 0.4f, 0.8f, 1.0f);
+        // shader.setUniform4f("u_Color", red, 0.4f, 0.8f, 1.0f);
 
         renderer.draw(va, ib, shader);
 

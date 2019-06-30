@@ -47,7 +47,7 @@ function copyResource(sources, target, relativePath)
         local resourceDirName = path.getbasename(source);
         prebuildcommands(" [ -d $(TARGETDIR)/".. relativePath .." ] || mkdir $(TARGETDIR)/".. relativePath ..";")
         prebuildcommands(" [ -d $(TARGETDIR)/".. relativePath .."/".. resourceDirName .." ] || ln -s " .. source .. " $(realpath $(TARGETDIR))//".. relativePath .."/;")
-        defines {"RESOURCE_PATH=\"" .. relativePath .. "\""}
+        defines {"RESOURCE_PATH=\"" .. relativePath .. "/\""}
     end
 end
 

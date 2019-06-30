@@ -5,7 +5,7 @@
 
 Shader::Shader(const std::string& filepath)
 {
-    ShaderSources shaderSources = parseSource(RESOURCE_PATH "/" + filepath);
+    ShaderSources shaderSources = parseSource(RESOURCE_PATH + filepath);
     std::cout << "VERTEX\n";
     std::cout << shaderSources.vertexSource;
     std::cout << "FRAGMENT\n";
@@ -19,7 +19,19 @@ Shader::~Shader()
     GLCall(glDeleteProgram(m_id));
 }
 
-void Shader::setUniform4f(const std::string& name, float v1, float v2, float v3, float v4) const
+void Shader::setUniform1i(const std::string& name, int value)
+{
+    bind();
+    GLCall(glUniform1i(getUniformLocation(name), value));
+}
+
+void Shader::setUniform1f(const std::string& name, float value)
+{
+    bind();
+    GLCall(glUniform1f(getUniformLocation(name), value));
+}
+
+void Shader::setUniform4f(const std::string& name, float v1, float v2, float v3, float v4)
 {
     bind();
     GLCall(glUniform4f(getUniformLocation(name), v1, v2, v3, v4));
@@ -37,13 +49,17 @@ void Shader::unbind() const
 
 // private section
 
-int Shader::getUniformLocation (const std::string& name) const
+int Shader::getUniformLocation (const std::string& name)
 {
+    if(m_uniformLocationCache.find(name) != m_uniformLocationCache.end())
+        return m_uniformLocationCache[name];
+    
     GLCall(int uniformLocation = glGetUniformLocation(m_id, name.c_str()));
     if(uniformLocation < 0)
     {
         std::cout << "[OPENGL] ERROR => " << "Uniform " << name << " not found in shader" << std::endl;
     }
+    m_uniformLocationCache[name] = uniformLocation;
     return uniformLocation;
 }
 
