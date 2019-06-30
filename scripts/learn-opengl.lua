@@ -1,7 +1,4 @@
 require 'utils/inspect'
-group "3rdparty"
--- dofile "3rdparty/cereal.lua"
--- dofile "3rdparty/pstl.lua"
 project "learn-opengl"
   	language "C++"
     kind     "ConsoleApp"
@@ -44,6 +41,9 @@ for _,dir in ipairs(matches) do
     -- files {
     --     path.join(LOPENGL_SRC_DIR, name, "**.glsl")
     -- }
+    includedirs {
+        STB_INC_DIR,
+    }
 
     links {
         "learn-opengl",
@@ -51,7 +51,8 @@ for _,dir in ipairs(matches) do
         "GL",
         "GLEW",
         "pthread",
-        "glfw"
+        "glfw",
+        "3rdparty_stb"
         -- "pstl",
     }
 

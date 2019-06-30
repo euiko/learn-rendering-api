@@ -13,8 +13,6 @@
 #include "vertex_buffer_layout.h"
 #include "shader.h"
 
-// TODO: Include Shader class
-
 int main()
 {
     GLFWwindow* window;

@@ -5,6 +5,8 @@
 #include <string>
 #include <sstream>
 #include <cassert>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 
 #include "renderer.h"
 #include "vertex_buffer.h"
@@ -33,6 +35,9 @@ int main()
         glfwTerminate();
         return -1;
     }
+
+    int w, h, bpp;
+    unsigned char* image = stbi_load(RESOURCE_PATH "textures/logo.png", &w, &h, &bpp, 4);
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
