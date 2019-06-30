@@ -27,7 +27,7 @@
             "name": "(gdb) Debug LearnOpenGL 1.7 - Texture 2D",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/linux64_clang/bin/learn-opengl-1.7-texture2dDebug",
+            "program": "${workspaceFolder}/build/linux64_clang/bin/learn-opengl-1.7-texture-blendingDebug",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/build/linux64_clang/bin/",
