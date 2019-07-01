@@ -27,6 +27,7 @@ dofile "utils/module.lua"
 
 group "3rdparty"
 dofile "3rdparty/stb.lua"
+dofile "3rdparty/glm.lua"
 -- dofile "3rdparty/pstl.lua"
 group "bin"
 dofile "learn-opengl.lua"

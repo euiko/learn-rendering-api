@@ -43,6 +43,7 @@ for _,dir in ipairs(matches) do
     -- }
     includedirs {
         STB_INC_DIR,
+        GLM_INC_DIR,
     }
 
     links {
@@ -52,7 +53,8 @@ for _,dir in ipairs(matches) do
         "GLEW",
         "pthread",
         "glfw",
-        "3rdparty_stb"
+        "3rdparty_stb",
+        "3rdparty_glm"
         -- "pstl",
     }
 
