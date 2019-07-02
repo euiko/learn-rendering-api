@@ -268,7 +268,7 @@ function exampleProject(_baseExampleDir, _prefix, ...)
 
 end
 
-function dependency(namespace, name, cppmodule, usage_decl, deps)
+function dep(namespace, name, cppmodule, usage_decl, deps)
     local m = {
         project = nil,
         cppmodule = cppmodule,

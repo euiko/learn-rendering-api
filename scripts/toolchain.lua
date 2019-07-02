@@ -42,13 +42,44 @@ local function crtNone()
 	configuration {}
 end
 
-function copyResource(sources, target, relativePath)
-    for _, source in ipairs(sources) do
-        local resourceDirName = path.getbasename(source);
-        prebuildcommands(" [ -d $(TARGETDIR)/".. relativePath .." ] || mkdir $(TARGETDIR)/".. relativePath ..";")
-        prebuildcommands(" [ -d $(TARGETDIR)/".. relativePath .."/".. resourceDirName .." ] || ln -s " .. source .. " $(realpath $(TARGETDIR))//".. relativePath .."/;")
-        defines {"RESOURCE_PATH=\"" .. relativePath .. "/\""}
-    end
+function copyResource(sources, target, gccDepMainFile, projectDir)
+	local command = { "@echo Copying resource $(<) to the $(@)","cp -R $(<) $(@)"}
+	
+	if((target or "") == "") then
+		target = BUILD_DIR .. "/assets"
+	end
+	local customBuildDependecies = {}
+	local customBuilds = {}
+	for _, source in ipairs(sources) do
+		if((gccDepMainFile or "") == "") then
+			gccDepMainFile = source
+		end
+		local targetRelativePath = path.getrelative(projectDir, source)
+		local targetPath = path.join(target, targetRelativePath) 
+		local customBuildDependency = { gccDepMainFile, path.join(target, path.getbasename(source))}
+		table.insert( customBuildDependecies, customBuildDependency)
+
+		local dependencies = {}
+		if os.isdir(source) then
+			dependencies = os.matchfiles(source .. "/**")
+		end
+		table.insert( customBuilds, {source, targetPath, dependencies, command})
+		-- buildcommands("echo halohalo")
+
+        -- local resourceDirName = path.getbasename(source);
+		-- prebuildcommands(" [ -d $(TARGETDIR)/".. relativePath .." ] || mkdir $(TARGETDIR)/".. relativePath ..";")
+		-- if(sym_link) then
+		-- 	prebuildcommands(" [ -d $(TARGETDIR)/".. relativePath .."/".. resourceDirName .." ] || ln -s " .. source .. " $(realpath $(TARGETDIR))//".. relativePath .."/;")
+		-- else
+		-- end
+        -- defines {"RESOURCE_PATH=\"" .. relativePath .. "/\""}
+	end
+	printtable("test", customBuildDependecies)
+	
+	-- printtable("hila", {path.join(dir, "shaders"), path.join(BUILD_DIR, "assets", "shaders"), {}, {"cp -R $(<) $(@)"}})
+	-- printtable("halo", buildTasks)
+	custombuildtask(customBuilds)
+	dependency(customBuildDependecies)
 end
 
 function toolchain(_buildDir, _libDir)
@@ -573,6 +604,10 @@ function toolchain(_buildDir, _libDir)
 		linkoptions {
 			"/ignore:4221", -- LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
 		}
+
+	configuration { "cmake" }
+		targetdir (path.join(_buildDir, "cmake", "bin"))
+		objdir (path.join(_buildDir, "cmake", "obj"))
 
 	configuration { "vs2008" }
 		includedirs { path.join(bxDir, "include/compat/msvc/pre1600") }

@@ -37,10 +37,21 @@ matches = os.matchdirs(path.join(LOPENGL_SRC_DIR, "*"))
 for _,dir in ipairs(matches) do
     name = path.getrelative(LOPENGL_SRC_DIR, dir)
     exampleProject(LOPENGL_SRC_DIR, "learn-opengl", name)
-    copyResource(os.matchdirs(dir .. "/*"), target, name)
-    -- files {
-    --     path.join(LOPENGL_SRC_DIR, name, "**.glsl")
+
+    -- custombuildtask {
+    --     {path.join(dir, "shaders/basic.glsl"), path.join(BUILD_DIR, "assets", name, "shaders/basic.glsl"), {}, {"@echo Generating m6809 source file...","cp -R $(<) $(@)"}}
     -- }
+    
+    local explodedName = string.explode(name, "-")
+    local projectName = table.concat( explodedName, "-", 2 )
+
+    copyResource(os.matchdirs(dir .. "/*"), path.join( BUILD_DIR , "assets", name), path.join(dir, projectName .. ".cpp"), dir)
+    -- defines {
+    --     "HaloHalo"
+    -- }
+    files {
+        path.join(LOPENGL_SRC_DIR, name, "**.glsl")
+    }
     includedirs {
         STB_INC_DIR,
         GLM_INC_DIR,
@@ -53,8 +64,8 @@ for _,dir in ipairs(matches) do
         "GLEW",
         "pthread",
         "glfw",
-        "3rdparty_stb",
-        "3rdparty_glm"
+        -- "3rdparty_stb",
+        -- "3rdparty_glm"
         -- "pstl",
     }
 
