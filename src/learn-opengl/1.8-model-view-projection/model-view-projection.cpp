@@ -7,6 +7,8 @@
 #include <cassert>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "renderer.h"
 #include "vertex_buffer.h"
@@ -75,11 +77,14 @@ int main()
     va.addBuffer(vb, layout);
     
     IndexBuffer ib(indices, 6);
-    
+
+    glm::mat4 projection = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+
     Shader shader("shaders/texture-mvp.glsl");
     Texture texture("textures/logo.png");
     texture.bind();
     shader.setUniform1i("u_texture", 0);
+    shader.setUniformMat4f("u_mvp", projection);
 
     float red = 0.0f;
     float inc = 0.5;
