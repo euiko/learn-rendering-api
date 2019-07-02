@@ -72,9 +72,8 @@ function copyResource(sources, target, gccDepMainFile, projectDir)
 		-- 	prebuildcommands(" [ -d $(TARGETDIR)/".. relativePath .."/".. resourceDirName .." ] || ln -s " .. source .. " $(realpath $(TARGETDIR))//".. relativePath .."/;")
 		-- else
 		-- end
-        -- defines {"RESOURCE_PATH=\"" .. relativePath .. "/\""}
 	end
-	printtable("test", customBuildDependecies)
+	-- printtable("test", customBuildDependecies)
 	
 	-- printtable("hila", {path.join(dir, "shaders"), path.join(BUILD_DIR, "assets", "shaders"), {}, {"cp -R $(<) $(@)"}})
 	-- printtable("halo", buildTasks)

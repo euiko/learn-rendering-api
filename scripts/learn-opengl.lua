@@ -46,6 +46,7 @@ for _,dir in ipairs(matches) do
     local projectName = table.concat( explodedName, "-", 2 )
 
     copyResource(os.matchdirs(dir .. "/*"), path.join( BUILD_DIR , "assets", name), path.join(dir, projectName .. ".cpp"), dir)
+    defines {"RESOURCE_PATH=\"" .. path.join(BUILD_DIR, "assets", name) .. "/\""}
     -- defines {
     --     "HaloHalo"
     -- }
